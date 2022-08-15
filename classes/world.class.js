@@ -13,6 +13,7 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.passWorld();
+        this.checkCollisions();
     }
 
     passWorld() {
@@ -39,10 +40,10 @@ class World {
 
     addToMap(mo) {
         if (mo.imageMirrored) {
-           this.mirrorImage(mo)
+            this.mirrorImage(mo)
         }
         mo.draw(this.ctx);
-        this.drawRectangles(mo);
+        mo.drawRectangles(this.ctx);
         if (mo.imageMirrored) {
             this.restoreMirroredImage(mo)
         }
@@ -51,25 +52,8 @@ class World {
     addToMapFromArray(array) {
         array.forEach(item => {
             this.ctx.drawImage(item.img, item.x, item.y, item.width, item.height)
-            this.drawRectangles(item)
+            item.drawRectangles(this.ctx)
         })
-    }
-
-    drawRectangles(mo) {
-
-    if(this instanceof Character) {
-         this.ctx.beginPath();
-        this.ctx.lineWidth = '5';
-        this.ctx.strokeStyle = 'blue';
-        this.ctx.rect(mo.x, mo.y, mo.width, mo.height);
-        this.ctx.stroke();
-    }
-    // this.ctx.beginPath();
-    // this.ctx.lineWidth = '5';
-    // this.ctx.strokeStyle = 'blue';
-    // this.ctx.rect(mo.x, mo.y, mo.width, mo.height);
-    // this.ctx.stroke();
-       
     }
 
     mirrorImage(mo) {
@@ -80,7 +64,18 @@ class World {
     }
 
     restoreMirroredImage(mo) {
-this.ctx.restore();
-            mo.x = mo.x * -1;
+        this.ctx.restore();
+        mo.x = mo.x * -1;
+    }
+
+    checkCollisions() {
+        setInterval(() => {
+        this.level.enemies.forEach(enemy => {
+            if(this.character.isColliding(enemy)) {
+                console.log("collided with", enemy)
+            }
+        });
+        }, 1000);
+        
     }
 }

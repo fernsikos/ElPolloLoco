@@ -38,6 +38,8 @@ class Character extends MoveableObject {
         this.applyGravity();
     }
 
+   
+
     animate() {
 
         setInterval(() => {
@@ -66,6 +68,13 @@ class Character extends MoveableObject {
             }
         }, 1000 / 10)
 
+    }
+
+    isColliding(mo) {
+        return this.x + this.width > mo.x &&
+        this.y + this.height > mo.y &&
+        this.x < mo.x &&
+        this.y < mo.y
     }
 
 }

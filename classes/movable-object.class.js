@@ -27,6 +27,19 @@ class MoveableObject {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
+    
+
+    drawRectangles(ctx) {
+
+        if (this instanceof Chicken || this instanceof Character) {
+            ctx.beginPath();
+            ctx.lineWidth = '5';
+            ctx.strokeStyle = 'blue';
+            ctx.rect(this.x, this.y, this.width, this.height);
+            ctx.stroke();
+        }
+    }
+
     playAnimation(images) {
         let i = this.imageCounter % this.IMAGES_WALKING.length;
         let path = images[i];
@@ -34,7 +47,7 @@ class MoveableObject {
         this.imageCounter++;
     }
 
- 
+
 
     applyGravity() {
         setInterval(() => {
