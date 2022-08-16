@@ -8,7 +8,7 @@ class MoveableObject extends DrawableObject {
     acceleration = 2;
     energy = 100;
     lastHit = 0;
-    lastMove = 0;
+    lastMove = new Date().getTime();
 
     
 

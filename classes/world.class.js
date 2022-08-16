@@ -9,6 +9,7 @@ class World {
     healthbar = new Statusbar();
     coinbar = new Coinbar();
     bottlebar = new Bottlebar();
+ 
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -30,6 +31,7 @@ class World {
         this.addToMapFromArray(this.level.backgroundObjects);
         this.addToMapFromArray(this.level.clouds);
         this.addToMap(this.character);
+        this.addToMapFromArray(this.level.bottle);
         this.addToMapFromArray(this.level.enemies);
         this.ctx.translate(-this.camera_x, 0); // ab hier sind objekte wieder statisch
         this.addToMap(this.healthbar);
