@@ -7,6 +7,8 @@ class World {
     level = level1;
     character = new Character();
     healthbar = new Statusbar();
+    coinbar = new Coinbar();
+    bottlebar = new Bottlebar();
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -31,6 +33,8 @@ class World {
         this.addToMapFromArray(this.level.enemies);
         this.ctx.translate(-this.camera_x, 0); // ab hier sind objekte wieder statisch
         this.addToMap(this.healthbar);
+        this.addToMap(this.coinbar);
+        this.addToMap(this.bottlebar);
 
         //Draw wird immer wieder ausgeführt
         let self = this;

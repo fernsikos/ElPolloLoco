@@ -10,7 +10,7 @@ class Statusbar extends DrawableObject {
 
     x = 10;
     y = 10;
-    height = 30;
+    height = 32;
     width = 120;
     healthStatus = 100;
 
