@@ -1,53 +1,54 @@
-class MoveableObject {
-    x;
-    y;
-    img;
-    imageCache = [];
-    height = 260;
-    width = 130;
+class MoveableObject extends DrawableObject {
+   
+    
+   
     speed = 0.15;
     imageMirrored = false;
     speedY = 0;
     acceleration = 2;
-
-    loadImage(path) {
-        this.img = new Image();
-        this.img.src = path;
-    }
-
-    loadImagesToCache(arr) {
-        arr.forEach(path => {
-            let img = new Image();
-            img.src = path;
-            this.imageCache[path] = img;
-        });
-    }
-
-    draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
+    energy = 100;
+    lastHit = 0;
+    lastMove = 0;
 
     
 
-    drawRectangles(ctx) {
-
-        if (this instanceof Chicken || this instanceof Character) {
-            ctx.beginPath();
-            ctx.lineWidth = '5';
-            ctx.strokeStyle = 'blue';
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.stroke();
-        }
-    }
-
     playAnimation(images) {
-        let i = this.imageCounter % this.IMAGES_WALKING.length;
+        let i = this.imageCounter % images.length;
         let path = images[i];
         this.img = this.imageCache[path];
         this.imageCounter++;
     }
 
+    hit() {
+        this.energy -= 5;
+        if (this.energy < 0) {
+            this.energy = 0
+        } else {
+            this.lastHit = new Date().getTime();
+        }
+    }
 
+    isDead() {
+        return this.energy == 0
+    }
+
+    isHurt() {
+        let timePassedSinceLastHit = new Date().getTime() - this.lastHit;
+        timePassedSinceLastHit = timePassedSinceLastHit / 1000;
+        return timePassedSinceLastHit < 1
+    }
+
+    isResting() {
+        let timePassedSinceLAstMove = new Date().getTime() - this.lastMove;
+        timePassedSinceLAstMove = timePassedSinceLAstMove / 1000;
+        return timePassedSinceLAstMove > 0.1 && timePassedSinceLAstMove < 5;
+    }
+
+    isSleepimg() {
+        let timePassedSinceLAstMove = new Date().getTime() - this.lastMove;
+        timePassedSinceLAstMove = timePassedSinceLAstMove / 1000;
+        return timePassedSinceLAstMove > 5;
+    }
 
     applyGravity() {
         setInterval(() => {
@@ -60,16 +61,19 @@ class MoveableObject {
 
     jump() {
         this.speedY = 25;
+        this.lastMove = new Date().getTime();
     }
 
     moveRight() {
         this.x += this.speed;
         this.imageMirrored = false;
         this.walking_sound.play();;
+        this.lastMove = new Date().getTime();
     }
 
     moveLeft() {
         this.x -= this.speed
+        this.lastMove = new Date().getTime();
     }
 
     isAboveGround() {

@@ -6,6 +6,7 @@ class World {
     camera_x = 0;
     level = level1;
     character = new Character();
+    healthbar = new Statusbar();
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -23,13 +24,13 @@ class World {
     draw() {
         //cleart das Canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.translate(this.camera_x, 0);
+        this.ctx.translate(this.camera_x, 0); //Ab hier bewegen sich Objekte
         this.addToMapFromArray(this.level.backgroundObjects);
         this.addToMapFromArray(this.level.clouds);
         this.addToMap(this.character);
         this.addToMapFromArray(this.level.enemies);
-        this.ctx.translate(-this.camera_x, 0);
-
+        this.ctx.translate(-this.camera_x, 0); // ab hier sind objekte wieder statisch
+        this.addToMap(this.healthbar);
 
         //Draw wird immer wieder ausgeführt
         let self = this;
@@ -70,12 +71,13 @@ class World {
 
     checkCollisions() {
         setInterval(() => {
-        this.level.enemies.forEach(enemy => {
-            if(this.character.isColliding(enemy)) {
-                console.log("collided with", enemy)
-            }
-        });
-        }, 1000);
-        
+            this.level.enemies.forEach(enemy => {
+                if (this.character.isColliding(enemy)) {
+                    this.character.hit();
+                    this.healthbar.syncronizeHealthStatus(this.character.energy);
+                }
+            });
+        }, 200);
     }
+
 }
